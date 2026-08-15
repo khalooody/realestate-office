@@ -1,0 +1,32 @@
+[
+  {
+    "id": "u-1",
+    "name": "خالد الخلودي",
+    "email": "admin@rawaq.ae",
+    "password": "rawaq2026",
+    "role": "owner",
+    "phone": "+971 50 123 4567",
+    "active": true,
+    "lastLogin": "2026-08-09T07:10:00+04:00"
+  },
+  {
+    "id": "u-2",
+    "name": "لمى العبدالله",
+    "email": "lama@rawaq.ae",
+    "password": "leasing2026",
+    "role": "leasing",
+    "phone": "+971 55 907 3312",
+    "active": true,
+    "lastLogin": "2026-08-08T18:02:00+04:00"
+  },
+  {
+    "id": "u-3",
+    "name": "مروان قاسم",
+    "email": "marwan@rawaq.ae",
+    "password": "viewer2026",
+    "role": "viewer",
+    "phone": "+971 52 441 0098",
+    "active": false,
+    "lastLogin": "2026-07-28T11:44:00+04:00"
+  }
+]

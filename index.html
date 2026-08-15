@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="ar" dir="rtl" translate="no" class="notranslate">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e0e0f" />
+    <!--
+      Stops the browser offering to translate the page. `lang="ar"` has to stay —
+      it is what gives Arabic its correct shaping, hyphenation and voice in a
+      screen reader — and it is also exactly what triggers the offer. These three
+      turn the offer off without lying about the language: the standard
+      `translate="no"`, plus the two forms Chrome and Edge actually read.
+
+      The offer is worth refusing all the more now that there is a real English
+      edition a click away: a machine pass over the Arabic would be a third,
+      worse version of a page that already has a proper second one.
+    -->
+    <meta name="google" content="notranslate" />
+
+    <!--
+      Which language this visitor asked for, applied before the first paint.
+
+      Inline and synchronous on purpose. `lang` and `dir` on the root are what
+      the whole stylesheet mirrors against, and src/main.js is a module — it
+      runs after the document has been parsed and, on a slow connection, after
+      it has been painted. Setting them there instead is a visible flip from one
+      writing direction to the other on every English load. Four lines here
+      cost nothing and remove it.
+
+      Only the two attributes. The text itself is swapped by i18n.js once the
+      bundle is up, which is invisible: everything above the fold at that moment
+      is the preloader, and every word of the document proper is seven
+      viewports down.
+    -->
+    <script>
+      (() => {
+        try {
+          const url = new URLSearchParams(location.search).get('lang');
+          const lang = url || localStorage.getItem('rawaq:lang');
+          if (lang !== 'en') return;
+          document.documentElement.lang = 'en';
+          document.documentElement.dir = 'ltr';
+          document.documentElement.classList.add('is-en');
+        } catch {
+          /* storage denied — the page stays in the language it is authored in */
+        }
+      })();
+    </script>
+
+    <!--
+      The tab mark, cut from `fiveicon.png`.
+
+      Trimmed and re-centred rather than used as supplied: the ink in the source
+      sits well right of centre — 183px of empty on one side against 64 on the
+      other — and a favicon is 16 device pixels wide, so that offset is not a
+      subtlety, it is the mark visibly hanging off one edge of its own square.
+      Cropped to the ink and padded evenly, it now measures 7px against 8px at
+      32×32, which is as centred as an odd-width glyph can be.
+
+      Two files, because they are asked different questions. The 32 keeps its
+      transparency, so the mark takes the colour of whatever chrome the browser
+      puts behind it. The Apple touch icon cannot: iOS composites a homescreen
+      icon onto black and rounds the corners itself, so that one is baked onto
+      the page's own `--bg-base` and given more room inside the square.
+    -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/icon-32.png" />
+    <link rel="apple-touch-icon" href="/brand/icon-180.png" />
+    <meta
+      name="description"
+      content="32 مكتباً تجارياً فاخراً جاهز التشطيب في قلب الخليج التجاري بدبي. جولة افتراضية تفاعلية — والأسعار وأولوية اختيار الدور للمسجّلين أولاً."
+    />
+    <meta property="og:title" content="رواق · مكاتب تجارية فاخرة — الخليج التجاري، دبي" />
+    <meta
+      property="og:description"
+      content="مكاتب جاهزة التشطيب من 65 إلى 420 م². التسجيل مفتوح."
+    />
+    <title>رواق · مكاتب تجارية فاخرة للإيجار — التسجيل مفتوح</title>
+    <script type="module" crossorigin src="/assets/main-bC6NQlav.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/500-Dt57VjtK.js">
+    <link rel="stylesheet" crossorigin href="/assets/500-CcCH8nVX.css">
+    <link rel="stylesheet" crossorigin href="/assets/main-DOsRI66q.css">
+  </head>
+  <body>
+    <!--
+      No `dir` on this element, nor on `.page` or `.foot` below, and their
+      removal is what makes the English edition possible at all. All three used
+      to restate `dir="rtl"`, which is inherited from `<html>` and was therefore
+      already true — right up until the root says `ltr`, at which point three
+      hard-coded attributes quietly outvote it and the document sets backwards
+      inside an otherwise mirrored page. Inheritance was always the mechanism;
+      these were a comment written as markup.
+    -->
+    <aside class="placeholder-note">
+      <strong data-i18n="placeholder.title">لم يتم العثور على سلسلة الصور.</strong><br />
+      <span data-i18n-html="placeholder.body_html">
+        شغّل <code>npm run frames</code> لاستخراج الإطارات من
+        <code>public/video/Back-video-4K.mp4</code>، ثم أعد تحميل الصفحة.
+      </span>
+    </aside>
+
+    <!--
+      Seven full-viewport spacers: the hero, the frame reveal, and one per scene.
+      They carry no visible content — every part of the tour is a fixed overlay
+      driven by scroll percentage — they exist purely to create the scroll
+      distance the sequence is mapped onto.
+
+      Keep in sync with SECTIONS in src/config.js. Their combined height is also
+      what the scrubber measures to work out the tour's share of a page that now
+      continues well past them; see ScrollScrubber._deriveScrubWindow().
+    -->
+    <main class="spacers" aria-hidden="true">
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+    </main>
+
+    <!--
+      The "مرّر للأسفل" hint used to sit here, pinned bottom-centre. The hero's
+      bottom band now occupies exactly that strip, and a floating label over a
+      hairline-divided bar is noise on top of structure. intro.js takes the
+      element optionally, so its absence costs nothing.
+    -->
+
+    <!--
+      Everything below is the launch page proper: ordinary flowing content that
+      begins where the tour ends. It is markup rather than JavaScript on purpose
+      — it is a document, and copy belongs in one.
+
+      Which is also why every line of it carries a `data-i18n` key rather than
+      having an English twin in a second file: the Arabic stays here, where it
+      is edited, and src/i18n.js holds one English string per key and nothing
+      else. Two copies of this document would be two documents to keep in step,
+      and they would not stay in step.
+    -->
+    <div class="page">
+      <!--
+        The copper wash and the dot field. Fixed, so the document scrolls over
+        it and it reads as depth rather than as decoration printed on the page.
+
+        It has to live *inside* `.page` and not beside it: `.page` paints an
+        opaque ground of its own (see `.page::before` — it is there to stop the
+        retiring tour frame showing through), and anything behind that ground is
+        simply not visible. Sitting on the same negative layer, one step later in
+        DOM order, puts it over the ground and under the content.
+
+        backdrop.js appends the canvas; the wash itself is pure CSS.
+      -->
+      <div class="backdrop" aria-hidden="true"></div>
+      <!-- ---- Suite types ------------------------------------------------- -->
+      <section class="sec" id="types">
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow" data-reveal="line" data-i18n="types.eyebrow">الأنماط</p>
+            <h2 class="h2" data-reveal data-i18n="types.h2">ثلاثة أنماط حسب حجم فريقك</h2>
+          </header>
+
+          <div class="types" data-reveal="stagger">
+            <article class="type" data-glow style="--i: 0">
+              <h3 class="type__name" data-i18n="types.a.name">النمط A</h3>
+              <p class="type__kind" data-i18n="types.a.kind">مكتب مضغوط</p>
+              <dl class="type__specs">
+                <div class="spec"><dt data-i18n="types.spec.area">المساحة</dt><dd data-i18n="types.a.area">65 – 140 م²</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.desks">محطات العمل</dt><dd data-i18n="types.a.desks">8 – 16</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.rooms">غرف الاجتماعات</dt><dd data-i18n="types.a.rooms">1</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.parking">المواقف</dt><dd data-i18n="types.a.parking">3</dd></div>
+              </dl>
+              <div class="type__gate">
+                <span class="type__lbl" data-i18n="types.rentLabel">الإيجار السنوي</span>
+                <span class="rent" data-i18n="types.a.rent">210,000 درهم</span>
+              </div>
+              <a class="type__cta" href="#register" data-i18n="types.cta">سجّل لعرض السعر</a>
+            </article>
+
+            <article class="type is-featured" data-glow style="--i: 1">
+              <p class="type__flag" data-i18n="types.flag">الأكثر طلباً</p>
+              <h3 class="type__name" data-i18n="types.b.name">النمط B</h3>
+              <p class="type__kind" data-i18n="types.b.kind">مكتب متوسط</p>
+              <dl class="type__specs">
+                <div class="spec"><dt data-i18n="types.spec.area">المساحة</dt><dd data-i18n="types.b.area">180 – 220 م²</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.desks">محطات العمل</dt><dd data-i18n="types.b.desks">24 – 32</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.rooms">غرف الاجتماعات</dt><dd data-i18n="types.b.rooms">2</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.parking">المواقف</dt><dd data-i18n="types.b.parking">6</dd></div>
+              </dl>
+              <div class="type__gate">
+                <span class="type__lbl" data-i18n="types.rentLabel">الإيجار السنوي</span>
+                <span class="rent" data-i18n="types.b.rent">365,000 درهم</span>
+              </div>
+              <a class="type__cta type__cta--solid" href="#register" data-i18n="types.cta">سجّل لعرض السعر</a>
+            </article>
+
+            <article class="type" data-glow style="--i: 2">
+              <h3 class="type__name" data-i18n="types.c.name">النمط C</h3>
+              <p class="type__kind" data-i18n="types.c.kind">دور كامل</p>
+              <dl class="type__specs">
+                <div class="spec"><dt data-i18n="types.spec.area">المساحة</dt><dd data-i18n="types.c.area">420 م²</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.desks">محطات العمل</dt><dd data-i18n="types.c.desks">حتى 48</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.rooms">غرف الاجتماعات</dt><dd data-i18n="types.c.rooms">3 + قاعة</dd></div>
+                <div class="spec"><dt data-i18n="types.spec.parking">المواقف</dt><dd data-i18n="types.c.parking">12</dd></div>
+              </dl>
+              <div class="type__gate">
+                <span class="type__lbl" data-i18n="types.rentLabel">الإيجار السنوي</span>
+                <span class="rent" data-i18n="types.c.rent">740,000 درهم</span>
+              </div>
+              <a class="type__cta" href="#register" data-i18n="types.cta">سجّل لعرض السعر</a>
+            </article>
+          </div>
+
+          <p class="lockrow" data-reveal>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" />
+            </svg>
+            <!-- Wrapped rather than left loose, so it has somewhere to carry its
+                 key. `.lockrow` is a flex row, and a bare text node in one is
+                 already an anonymous flex item — naming it changes nothing. -->
+            <span data-i18n="types.locked">أسعار الإيجار وشروط العقد تُكشف للمسجّلين أولاً.</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- ---- Floor plans ------------------------------------------------- -->
+      <section class="sec" id="plans">
+        <div class="wrap">
+          <div class="split">
+            <!--
+              The drawing is a photograph of the real thing now, not the
+              schematic SVG that stood in for it. That SVG was six rectangles
+              and six labels — a placeholder good enough to show what the panel
+              was *for* — and it goes with the file it was standing in for.
+
+              **And it is not blurred.** The blur was the gate: the plan was
+              held soft until a visitor registered, on the same argument as the
+              rents. It is removed here by request, and the badge over it goes
+              with it — a lock caption over a picture nobody is being denied is
+              a promise the page is not keeping. The rents behind `.is-unlocked`
+              are untouched; this panel simply stopped being part of that gate.
+
+              `width`/`height` are the file's own, so the row holds its shape
+              before the image lands. 1168×880 is 1.327 against the old SVG's
+              1.333 — close enough that nothing around it moved.
+            -->
+            <div class="plan" data-glow data-reveal="wipe" data-tilt="6">
+              <img src="/photo/plan.webp" width="1168" height="880"
+                   alt="مخطط دور نموذجي — مساحة مفتوحة، اجتماعات، استقبال، مكتب مدير، مطبخ وخدمات"
+                   data-i18n-attr="alt: plans.alt"
+                   loading="lazy" decoding="async" />
+            </div>
+
+            <div class="split__copy">
+              <p class="eyebrow" data-reveal="line" data-i18n="plans.eyebrow">مخططات الأدوار</p>
+              <h2 class="h2" data-reveal data-i18n="plans.h2">المخططات الكاملة بصيغة PDF</h2>
+              <p class="lede" data-reveal data-i18n="plans.lede">
+                مخططات الأدوار الخمسة بالأبعاد التفصيلية، وتوزيع محطات العمل، ومواقع
+                الخدمات ونقاط الكهرباء والشبكة. تصل إلى بريدك بعد التسجيل مباشرة.
+              </p>
+              <a class="btn btn--solid" href="#register" data-reveal data-i18n="plans.cta">سجّل لتحميل المخططات</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- What the lease covers --------------------------------------- -->
+      <section class="sec" id="lease">
+        <div class="wrap">
+          <header class="sec-head sec-head--center">
+            <h2 class="h2" data-reveal data-i18n="lease.h2">ما يشمله عقد الإيجار</h2>
+            <p class="lede lede--center" data-reveal data-i18n="lease.lede">
+              كل ما يلزم لتشغيل مكتب من اليوم الأول — مشمول في الإيجار، بلا فواتير
+              منفصلة ولا عقود جانبية.
+            </p>
+          </header>
+
+          <!--
+            The eight inclusions, grouped into the four things a tenant actually
+            asks about. Every one of the eight is still named — they are the
+            chips under each description — but stacking eight equal tiles made
+            "مواقف مظللة" look like the same size of promise as "مكتب مسلّم
+            بالتشطيب الكامل", and it is not.
+
+            The photographs are frames from the tour above, not new assets: the
+            reader has already walked through these rooms, and showing the same
+            footage is what ties the offer to what they just saw.
+
+            Static without JavaScript: the first group is open, its photograph is
+            the one the stylesheet shows, and the rest are reachable by scroll.
+          -->
+          <div class="lease" data-reveal>
+            <div class="lease__list">
+              <div class="lease__row is-active">
+                <span class="lease__rail" aria-hidden="true"><i class="lease__fill"></i></span>
+                <button class="lease__tab" type="button" aria-expanded="true" aria-controls="lease-d1">
+                  <span class="lease__num" aria-hidden="true">/01</span>
+                  <span class="lease__t" data-i18n="lease.1.t">المكتب جاهز</span>
+                </button>
+                <div class="lease__reveal" id="lease-d1">
+                  <div>
+                    <p class="lease__d" data-i18n="lease.1.d">
+                      تشطيب وأثاث مسلّم بالكامل، وخط ألياف مخصص لكل مكتب. تفتح
+                      الباب وتبدأ العمل في اليوم نفسه.
+                    </p>
+                    <ul class="lease__tags">
+                      <li data-i18n="lease.1.tag1">التشطيب والأثاث</li>
+                      <li data-i18n="lease.1.tag2">الإنترنت</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lease__row">
+                <span class="lease__rail" aria-hidden="true"><i class="lease__fill"></i></span>
+                <button class="lease__tab" type="button" aria-expanded="false" aria-controls="lease-d2">
+                  <span class="lease__num" aria-hidden="true">/02</span>
+                  <span class="lease__t" data-i18n="lease.2.t">البهو المشترك</span>
+                </button>
+                <div class="lease__reveal" id="lease-d2">
+                  <div>
+                    <p class="lease__d" data-i18n="lease.2.d">
+                      استقبال يستقبل ضيوفك وبريدك، ومقهى في البهو الرئيسي — دون أن
+                      تحمل تكلفة أيٍّ منهما وحدك.
+                    </p>
+                    <ul class="lease__tags">
+                      <li data-i18n="lease.2.tag1">الاستقبال</li>
+                      <li data-i18n="lease.2.tag2">المقهى</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lease__row">
+                <span class="lease__rail" aria-hidden="true"><i class="lease__fill"></i></span>
+                <button class="lease__tab" type="button" aria-expanded="false" aria-controls="lease-d3">
+                  <span class="lease__num" aria-hidden="true">/03</span>
+                  <span class="lease__t" data-i18n="lease.3.t">قاعات الاجتماعات</span>
+                </button>
+                <div class="lease__reveal" id="lease-d3">
+                  <div>
+                    <p class="lease__d" data-i18n="lease.3.d">
+                      قاعات مجهزة بالشاشات والصوت، و12 ساعة شهرياً مشمولة في
+                      الإيجار تحجزها متى احتجتها.
+                    </p>
+                    <ul class="lease__tags">
+                      <li data-i18n="lease.3.tag1">12 ساعة شهرياً مجاناً</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lease__row">
+                <span class="lease__rail" aria-hidden="true"><i class="lease__fill"></i></span>
+                <button class="lease__tab" type="button" aria-expanded="false" aria-controls="lease-d4">
+                  <span class="lease__num" aria-hidden="true">/04</span>
+                  <span class="lease__t" data-i18n="lease.4.t">التشغيل اليومي</span>
+                </button>
+                <div class="lease__reveal" id="lease-d4">
+                  <div>
+                    <p class="lease__d" data-i18n="lease.4.d">
+                      نظافة يومية بعد الدوام، وأمن على مدار 24 ساعة بدخول ببطاقة،
+                      ومواقف مظللة في القبو.
+                    </p>
+                    <ul class="lease__tags">
+                      <li data-i18n="lease.4.tag1">النظافة</li>
+                      <li data-i18n="lease.4.tag2">الأمن</li>
+                      <li data-i18n="lease.4.tag3">المواقف</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lease__gallery">
+              <!--
+                The same wipe every other picture on the page uses, on the frame
+                rather than on a slide: the slides inside are positioned by
+                lease.js and carry inline transforms, so a reveal on any one of
+                them would be overwritten on the first tab change. The frame is
+                the only stable box here, and clipping it uncovers whichever
+                slide happens to be showing.
+              -->
+              <!--
+                No `data-tilt` here, and that is deliberate rather than an
+                omission. This frame already has motion of its own — four
+                stacked slides that gsap tweens on `yPercent` — and adding the
+                pointer lean puts a second writer on the same box: the module
+                rewrites a transform on *every* image inside it once a frame,
+                which also promotes all four to their own layers, and the two
+                systems trade frames whenever a slide is mid-transition. The
+                symptom is a small judder on hover and on scroll. The pictures
+                that do carry `data-tilt` — the plan, the owner's photograph —
+                are single and still.
+              -->
+              <div class="lease__frame" data-reveal="wipe">
+                <figure class="lease__slide">
+                  <img src="/frames/w1440/frame-0310.webp" width="1440" height="810"
+                       alt="مكتب خاص مسلّم بالتشطيب والأثاث الكامل"
+                       data-i18n-attr="alt: lease.alt1" decoding="async" />
+                </figure>
+                <figure class="lease__slide">
+                  <img src="/frames/w1440/frame-0115.webp" width="1440" height="810"
+                       alt="بهو الاستقبال والجدار الحي بارتفاع طابقين"
+                       data-i18n-attr="alt: lease.alt2" loading="lazy" decoding="async" />
+                </figure>
+                <figure class="lease__slide">
+                  <img src="/frames/w1440/frame-0030.webp" width="1440" height="810"
+                       alt="قاعة اجتماعات زجاجية بضوء طبيعي"
+                       data-i18n-attr="alt: lease.alt3" loading="lazy" decoding="async" />
+                </figure>
+                <figure class="lease__slide">
+                  <img src="/frames/w1440/frame-0220.webp" width="1440" height="810"
+                       alt="مساحة عمل مفتوحة بمحطات عمل مجهزة"
+                       data-i18n-attr="alt: lease.alt4" loading="lazy" decoding="async" />
+                </figure>
+
+                <!--
+                  The two chevrons are drawn pointing the way the *Arabic* page
+                  reads — previous is to the right — and they are flipped for
+                  the English one by a single `scaleX(-1)` in page.css rather
+                  than by swapping the paths here. One drawing, mirrored, cannot
+                  end up with a previous button that points forwards.
+                -->
+                <div class="lease__nav">
+                  <button class="lease__arrow" type="button" data-lease-prev
+                          aria-label="السابق" data-i18n-attr="aria-label: lease.prev">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                  </button>
+                  <button class="lease__arrow" type="button" data-lease-next
+                          aria-label="التالي" data-i18n-attr="aria-label: lease.next">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- Location ----------------------------------------------------- -->
+      <section class="sec" id="location">
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow" data-reveal="line" data-i18n="location.eyebrow">الموقع</p>
+            <h2 class="h2" data-reveal data-i18n="location.h2">في قلب الخليج التجاري</h2>
+          </header>
+
+          <div class="split split--map">
+            <div class="map" data-reveal>
+              <div class="map__canvas" id="locMap" role="img"
+                   aria-label="خريطة موقع رواق — الخليج التجاري، دبي"
+                   data-i18n-attr="aria-label: location.mapAria"></div>
+              <a class="map__link" href="https://maps.app.goo.gl/BeSdRrXKp92x33fb7"
+                 target="_blank" rel="noopener noreferrer"
+                 data-i18n="location.mapLink">افتح في خرائط جوجل</a>
+            </div>
+
+            <!-- `data-drift`: rides down beside the map. It was `position:
+                 sticky` — see the note in page.css for why that had to stop
+                 being a sticky and become a scrubbed transform.
+
+                 Arabic distinguishes three from twelve — «دقائق» against
+                 «دقيقة» — and English does not, so all five units carry the
+                 same key and land on the same «min». -->
+            <ul class="dist" data-drift data-reveal="stagger">
+              <li style="--i: 0">
+                <span class="dist__q"><span class="dist__m">3</span><span class="dist__u" data-i18n="location.unit">دقائق</span></span>
+                <span class="dist__n" data-i18n="location.d1">محطة مترو الخليج التجاري</span>
+              </li>
+              <li style="--i: 1">
+                <span class="dist__q"><span class="dist__m">6</span><span class="dist__u" data-i18n="location.unit">دقائق</span></span>
+                <span class="dist__n" data-i18n="location.d2">مركز دبي المالي العالمي</span>
+              </li>
+              <li style="--i: 2">
+                <span class="dist__q"><span class="dist__m">9</span><span class="dist__u" data-i18n="location.unit">دقائق</span></span>
+                <span class="dist__n" data-i18n="location.d3">داون تاون دبي وبرج خليفة</span>
+              </li>
+              <li style="--i: 3">
+                <span class="dist__q"><span class="dist__m">12</span><span class="dist__u" data-i18n="location.unit">دقيقة</span></span>
+                <span class="dist__n" data-i18n="location.d4">أربعة فنادق خمس نجوم</span>
+              </li>
+              <li style="--i: 4">
+                <span class="dist__q"><span class="dist__m">25</span><span class="dist__u" data-i18n="location.unit">دقيقة</span></span>
+                <span class="dist__n" data-i18n="location.d5">مطار دبي الدولي</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- Timeline ------------------------------------------------------ -->
+      <section class="sec" id="timeline">
+        <!--
+          The building's corner, sunk into the background of this section — see
+          cornerVideo.js for what reacts to the scroll here and, more usefully,
+          what deliberately does not.
+
+          `preload="none"`: the section is several viewports down and the layer
+          is decoration. Nothing about this file should compete with the tour's
+          frames on first load; cornerVideo.js upgrades it to `auto` when the
+          section is a screen and a half away.
+
+          It lives in `public/corner/`, not beside its master in `public/video/`.
+          That folder is deleted from the build on purpose (see vite.config.js —
+          it holds 280 MB of offline masters), so an encoded file left in it
+          works in dev and 404s in production. Same split as the hero: masters in
+          `video/`, output in its own folder.
+
+          No `loop` and no `autoplay` — this clip never plays. The scroll is its
+          transport, which is why it is encoded the way it is:
+
+            ffmpeg -i corner.mp4.mp4 -an -vf scale=1440:-2:flags=lanczos \
+                   -c:v libx264 -preset slow -crf 27 \
+                   -g 1 -keyint_min 1 -sc_threshold 0 \
+                   -pix_fmt yuv420p -movflags +faststart corner-scrub-1440.mp4
+
+          `-g 1` makes every frame a keyframe, so every frame is a seek target.
+          Without it the browser snaps to the nearest keyframe — about every two
+          seconds — and a ten-second clip would scrub in five hard cuts.
+
+          All-intra is expensive, so the width is the one dial worth thinking
+          about. Measured, same source, same settings:
+
+            960  → 2.6 MB      1440 → 6.4 MB      1920 → 10.8 MB
+
+          1440 is what is served. A 1920 twin is encoded and sitting beside it —
+          switching is this one `src` — but at 11% opacity over near-black the
+          difference between the two is not visible, and 4 MB is.
+        -->
+        <div class="tl__bg" aria-hidden="true">
+          <video muted playsinline preload="none" src="/corner/corner-scrub-1440.mp4"></video>
+        </div>
+
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow" data-reveal="line" data-i18n="timeline.eyebrow">الجدول الزمني</p>
+            <h2 class="h2" data-reveal data-i18n="timeline.h2">من التسجيل إلى تسليم المفاتيح</h2>
+          </header>
+
+          <div class="tl">
+              <div class="tl__track" aria-hidden="true"><span class="tl__fill"></span></div>
+              <ol class="tl__steps">
+                <li class="tl__step is-now">
+                  <span class="tl__dot" aria-hidden="true"></span>
+                  <div class="tl__card">
+                    <p class="tl__d" data-i18n="timeline.1.d">سبتمبر 2026</p>
+                    <p class="tl__l" data-i18n="timeline.1.l">فتح التأجير للمسجّلين</p>
+                  </div>
+                </li>
+                <li class="tl__step">
+                  <span class="tl__dot" aria-hidden="true"></span>
+                  <div class="tl__card">
+                    <p class="tl__d" data-i18n="timeline.2.d">نوفمبر 2026</p>
+                    <p class="tl__l" data-i18n="timeline.2.l">بدء أعمال التشطيب الداخلي</p>
+                  </div>
+                </li>
+                <li class="tl__step">
+                  <span class="tl__dot" aria-hidden="true"></span>
+                  <div class="tl__card">
+                    <p class="tl__d" data-i18n="timeline.3.d">يناير 2027</p>
+                    <p class="tl__l" data-i18n="timeline.3.l">تركيب الأثاث والتجهيزات</p>
+                  </div>
+                </li>
+                <li class="tl__step">
+                  <span class="tl__dot" aria-hidden="true"></span>
+                  <div class="tl__card">
+                    <p class="tl__d" data-i18n="timeline.4.d">الربع الأول 2027</p>
+                    <p class="tl__l" data-i18n="timeline.4.l">تسليم المفاتيح للأدوار 3–7</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+        </div>
+      </section>
+
+      <!-- ---- Owner ---------------------------------------------------------
+        The photograph is first in the source, which on an RTL page puts it on
+        the right — where it was asked for, and without a mirrored rule anywhere.
+        The words and the track record stack in the column beside it. On the
+        English page the same source order puts it on the left, which is the
+        mirror of the same composition rather than a different one.
+
+        WebP at the source resolution, not the 1.6 MB PNG it came from: this is
+        the only photograph on the page that is not already in the browser's
+        cache from the tour, so it is the one image whose weight is paid for
+        twice — once in transfer and once in the layout shift if it lands late.
+        `width`/`height` and the framed box below cover the second.
+      -->
+      <section class="sec" id="owner">
+        <div class="wrap split split--owner">
+          <figure class="owner__shot" data-reveal="wipe" data-tilt="10">
+            <img src="/asel-co.webp" width="880" height="1168"
+                 alt="مقر مجموعة الأصيل العقارية" data-i18n-attr="alt: owner.alt"
+                 loading="lazy" decoding="async" />
+          </figure>
+
+          <div>
+            <div class="split__copy">
+              <p class="eyebrow" data-reveal="line" data-i18n="owner.eyebrow">المالك والمشغّل</p>
+              <h2 class="h2" data-reveal data-i18n="owner.h2">مجموعة الأصيل العقارية</h2>
+              <p class="lede" data-reveal data-i18n="owner.lede">
+                مالك ومشغّل لمحفظة مكتبية في دبي والشارقة تتجاوز 48,000 م² مؤجّرة،
+                بمتوسط إشغال 94% على مدى السنوات الخمس الماضية.
+              </p>
+            </div>
+
+            <div class="owner__track">
+              <p class="eyebrow" data-reveal="line" data-i18n="owner.trackEyebrow">مشاريع مشغّلة</p>
+              <ul class="track" data-reveal="stagger">
+                <li style="--i: 0">
+                  <span class="track__p" data-i18n-html="owner.track1_html">برج الأصيل · الخليج التجاري<em>18,400 م² · إشغال 96%</em></span>
+                  <span class="track__y">2019</span>
+                </li>
+                <li style="--i: 1">
+                  <span class="track__p" data-i18n-html="owner.track2_html">مكاتب المستقبل · الخليج التجاري<em>14,200 م² · إشغال 92%</em></span>
+                  <span class="track__y">2022</span>
+                </li>
+                <li style="--i: 2">
+                  <span class="track__p" data-i18n-html="owner.track3_html">الأصيل بزنس بارك · الشارقة<em>15,600 م² · إشغال 93%</em></span>
+                  <span class="track__y">2024</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- Glimpses ------------------------------------------------------
+        An endless strip of rooms, ported from the drag-slider reference in
+        scripts/files. See gallery.js for what was and was not taken from it —
+        in particular, the wheel handler was not.
+
+        Six figures are authored here and gallery.js clones them into the loop.
+        That order matters: with the script absent this is still a plain
+        horizontally scrollable row of six captioned photographs, and the labels
+        and alt text live in the markup where they can be edited, rather than in
+        an array in a module.
+
+        It matters for the English page too, in a way worth stating: the clones
+        are made from these six *after* i18n.js has run over the document, so
+        they are cloned already translated and no key is ever applied twice to
+        the same caption.
+
+        These are reference photographs of the finish level, not of this
+        building — which is what the lede says, and what the footer's disclaimer
+        has said all along.
+
+        No `width`/`height` on these six. They each crop to a different intrinsic
+        size (they are scaled to *cover* 1300×1860, not fitted to it), and
+        `.shot__frame` pins the box at 7/10 regardless — so there is no layout
+        shift to prevent and any single pair of numbers here would be wrong for
+        five of the six.
+      -->
+      <section class="sec" id="glimpse">
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow" data-reveal="line" data-i18n="glimpse.eyebrow">لمحات</p>
+            <h2 class="h2" data-reveal data-i18n="glimpse.h2">كيف يبدو يوم العمل هنا</h2>
+            <p class="lede" data-reveal data-i18n="glimpse.lede">
+              البهو، الممرات، محطات العمل، والصالة — صور مرجعية توضّح مستوى
+              التشطيب والأجواء المستهدفة.
+            </p>
+          </header>
+        </div>
+
+        <div class="strip" data-reveal>
+          <div class="strip__track">
+            <figure class="shot">
+              <span class="shot__frame">
+                <img src="/gallery/lobby.webp"
+                     alt="بهو استقبال بمقهى وجدار سداسي وإضاءة معلّقة"
+                     data-i18n-attr="alt: glimpse.1.alt" loading="lazy" decoding="async" />
+              </span>
+              <figcaption class="shot__c" data-i18n="glimpse.1.c">البهو والمقهى</figcaption>
+            </figure>
+            <figure class="shot">
+              <span class="shot__frame">
+                <img src="/gallery/workstations.webp"
+                     alt="محطات عمل بارتفاع قابل للتعديل أمام جدار من الطوب"
+                     data-i18n-attr="alt: glimpse.2.alt" loading="lazy" decoding="async" />
+              </span>
+              <figcaption class="shot__c" data-i18n="glimpse.2.c">محطات العمل</figcaption>
+            </figure>
+            <figure class="shot">
+              <span class="shot__frame">
+                <img src="/gallery/corridor.webp"
+                     alt="ممر بين مكاتب زجاجية ينتهي بجدار من الطوب"
+                     data-i18n-attr="alt: glimpse.3.alt" loading="lazy" decoding="async" />
+              </span>
+              <figcaption class="shot__c" data-i18n="glimpse.3.c">ممر المكاتب</figcaption>
+            </figure>
+            <figure class="shot">
+              <span class="shot__frame">
+                <img src="/gallery/lounge.webp"
+                     alt="صالة استراحة بمقاعد وثيرة وطاولات خشبية"
+                     data-i18n-attr="alt: glimpse.4.alt" loading="lazy" decoding="async" />
+              </span>
+              <figcaption class="shot__c" data-i18n="glimpse.4.c">صالة الاستراحة</figcaption>
+            </figure>
+            <figure class="shot">
+              <span class="shot__frame">
+                <img src="/gallery/desk.webp"
+                     alt="مكتب خاص بسطح خشبي بجوار نافذة تطل على الأشجار"
+                     data-i18n-attr="alt: glimpse.5.alt" loading="lazy" decoding="async" />
+              </span>
+              <figcaption class="shot__c" data-i18n="glimpse.5.c">المكتب الخاص</figcaption>
+            </figure>
+            <figure class="shot">
+              <span class="shot__frame">
+                <img src="/gallery/facade.webp"
+                     alt="واجهة المبنى بعد الغروب ومكاتب مضاءة خلف الزجاج"
+                     data-i18n-attr="alt: glimpse.6.alt" loading="lazy" decoding="async" />
+              </span>
+              <figcaption class="shot__c" data-i18n="glimpse.6.c">الواجهة بعد الغروب</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- FAQ ----------------------------------------------------------- -->
+      <section class="sec" id="faq">
+        <div class="wrap wrap--narrow">
+          <header class="sec-head">
+            <h2 class="h2" data-reveal data-i18n="faq.h2">الأسئلة الشائعة</h2>
+            <p class="lede" data-reveal data-i18n="faq.lede">ما يسأل عنه المستأجرون عادةً قبل التوقيع.</p>
+          </header>
+
+          <div class="faq" data-reveal="stagger">
+            <details class="faq__item" style="--i: 0">
+              <summary data-i18n="faq.1.q">ما الحد الأدنى لمدة العقد؟</summary>
+              <div class="faq__a" data-i18n="faq.1.a">
+                سنتان للمكاتب المضغوطة والمتوسطة، وثلاث سنوات للدور الكامل. تتوفّر
+                عقود سنوية بسعر مختلف للشركات الجديدة، وتُناقش حالة بحالة.
+              </div>
+            </details>
+            <details class="faq__item" style="--i: 1">
+              <summary data-i18n="faq.2.q">هل المكتب مؤثث فعلاً؟</summary>
+              <div class="faq__a" data-i18n="faq.2.a">
+                نعم. يُسلَّم بأرضيات وإضاءة وتقسيمات زجاجية ومحطات عمل وكراسي وطاولة
+                اجتماعات ومطبخ صغير. تدخل بأجهزتك فقط.
+              </div>
+            </details>
+            <details class="faq__item" style="--i: 2">
+              <summary data-i18n="faq.3.q">هل يمكن تعديل التنسيق الداخلي؟</summary>
+              <div class="faq__a" data-i18n="faq.3.a">
+                نعم ضمن حدود متّفق عليها، وبتنسيق مع إدارة المبنى قبل التسليم.
+                التعديلات الجوهرية تُسعّر منفصلة وتُنفّذ بواسطة مقاول المبنى.
+              </div>
+            </details>
+            <details class="faq__item" style="--i: 3">
+              <summary data-i18n="faq.4.q">ما الرسوم خارج الإيجار؟</summary>
+              <div class="faq__a" data-i18n="faq.4.a">
+                رسوم خدمات المبنى السنوية، والكهرباء والمياه بعدّاد ديوا مستقل لكل
+                مكتب. النظافة والأمن والإنترنت والمواقف مشمولة في العقد.
+              </div>
+            </details>
+            <details class="faq__item" style="--i: 4">
+              <summary data-i18n="faq.5.q">هل يمكن استخدام العنوان لإصدار الرخصة التجارية؟</summary>
+              <div class="faq__a" data-i18n="faq.5.a">
+                نعم. نوفّر عقد إيجار موثّقاً عبر نظام «إيجاري» يصلح لإصدار الرخصة
+                التجارية من دائرة الاقتصاد والسياحة بدبي، ولفتح الحسابات البنكية.
+              </div>
+            </details>
+            <details class="faq__item" style="--i: 5">
+              <summary data-i18n="faq.6.q">هل الصور المعروضة نهائية؟</summary>
+              <div class="faq__a" data-i18n="faq.6.a">
+                الصور توضيحية وتمثّل مستوى التشطيب المستهدف. المواصفات النهائية
+                والتفاصيل المنجزة تُدرج في ملحق عقد الإيجار.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- Register ------------------------------------------------------ -->
+      <section class="sec reg" id="register">
+        <!--
+          The photograph behind the form. Held at about an eighth of full
+          strength and masked away at both edges, so it has no boundary of its
+          own and simply darkens into the section above it rather than starting
+          somewhere.
+
+          `data-parallax` is the travel, in percent, applied by scrollParallax.js
+          — the image climbs while the section scrolls past it, which is what
+          separates it from the words on top. The element is sized taller than
+          its frame in page.css to give that travel somewhere to happen; without
+          the overscan the move would drag an empty edge in behind it.
+
+          2200×943 at 192 KB, already well within budget, so it is served as it
+          is rather than re-encoded. `loading="lazy"` because it is decoration
+          six screens down and must not compete with the tour's own frames.
+        -->
+        <div class="reg__bg" aria-hidden="true">
+          <!--
+            Served from `photo/`, not from `images/`. That folder is deleted
+            from the production build on purpose (see vite.config.js — it holds
+            the full-size masters the gallery WebPs are cut from), so a file
+            referenced there works in `npm run dev` and 404s the moment the site
+            is deployed. Same split as the hero and the corner clip: masters in
+            the excluded folders, output in one of its own.
+          -->
+          <img src="/photo/register.webp" alt="" loading="lazy" decoding="async"
+               data-parallax="7" />
+        </div>
+        <!--
+          This block used to enter sideways from the start edge. It was removed:
+          sliding the whole panel meant the reader watched a large rectangle
+          travel before any of it could be read, and the word cascade inside it
+          could not begin until the travel finished. The section now assembles
+          in place — words, then fields, then the rules drawing under them —
+          which starts sooner and finishes sooner.
+        -->
+        <div class="wrap reg__in" data-reveal="assemble">
+          <div>
+            <p class="eyebrow" data-reveal="line" data-i18n="reg.eyebrow">التسجيل</p>
+            <h2 class="h2" data-reveal data-i18n="reg.h2">سجّل الآن، واختر دورك أولاً</h2>
+            <p class="lede" data-reveal data-i18n="reg.lede">
+              المسجّلون يستلمون قائمة أسعار الإيجار ومخططات الأدوار قبل الطرح العام
+              بأسبوع، مع أولوية في اختيار الدور والمكتب.
+            </p>
+
+            <div class="count" data-reveal="stagger">
+              <div style="--i: 0"><p class="count__n" id="cd">—</p><p class="count__u" data-i18n="reg.days">يوم</p></div>
+              <div style="--i: 1"><p class="count__n" id="ch">—</p><p class="count__u" data-i18n="reg.hours">ساعة</p></div>
+              <div style="--i: 2"><p class="count__n" id="cm">—</p><p class="count__u" data-i18n="reg.minutes">دقيقة</p></div>
+            </div>
+            <p class="fine" data-reveal data-i18n="reg.until">حتى فتح التأجير · 14 سبتمبر 2026</p>
+          </div>
+
+          <div>
+            <form class="form" id="regForm" novalidate>
+              <div class="field">
+                <label for="r-name" data-i18n="reg.name">الاسم</label>
+                <input id="r-name" name="name" type="text" placeholder="الاسم الكامل"
+                       data-i18n-attr="placeholder: reg.namePh" autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="r-co" data-i18n="reg.company">اسم الشركة</label>
+                <input id="r-co" name="company" type="text" placeholder="الشركة أو المؤسسة"
+                       data-i18n-attr="placeholder: reg.companyPh" autocomplete="organization" />
+              </div>
+              <div class="field">
+                <label for="r-phone" data-i18n="reg.phone">رقم الجوال</label>
+                <!--
+                  `dir="ltr"` and then aligned back to the start edge in CSS,
+                  which is two fixes in one declaration and neither is optional.
+
+                  A phone number is a left-to-right run. In an RTL field the
+                  browser resolves «+971 50 123 4567» as four weak digit groups
+                  separated by neutral spaces, and lays those groups out
+                  right-to-left — so the number reads «4567 123 50 971+», and it
+                  does the same to whatever the visitor types into it. `ltr`
+                  puts the groups back in order.
+
+                  That alone would also move the text to the field's left edge,
+                  which is where it was and is not where it belongs: every other
+                  field on this form starts at the right. `.field input[dir]` in
+                  page.css aligns it back, so the number is ordered like a phone
+                  number and positioned like the rest of the form. On the
+                  English page the field's start edge *is* the left, so that
+                  rule is turned back off there — see the `[dir='ltr']` twin
+                  beside it.
+                -->
+                <input id="r-phone" name="phone" type="tel" inputmode="tel" dir="ltr"
+                       placeholder="+971 50 123 4567" autocomplete="tel" />
+              </div>
+              <div class="field">
+                <label for="r-size" data-i18n="reg.size">حجم المساحة المطلوبة</label>
+                <select id="r-size" name="size">
+                  <option value="" data-i18n="reg.sizePh">اختر الحجم</option>
+                  <option data-i18n="reg.size1">65 – 140 م² · حتى 16 موظفاً</option>
+                  <option data-i18n="reg.size2">180 – 220 م² · حتى 32 موظفاً</option>
+                  <option data-i18n="reg.size3">420 م² · دور كامل</option>
+                  <option data-i18n="reg.size4">لم أحدّد بعد</option>
+                </select>
+              </div>
+              <button class="form__submit" id="regBtn" type="submit" data-i18n="reg.submit">سجّل اهتمامك</button>
+              <p class="fine" data-i18n="reg.fine">
+                التسجيل غير ملزم ولا يترتب عليه أي التزام مالي. تُستخدم بياناتك
+                للتواصل بخصوص هذا المشروع فقط.
+              </p>
+            </form>
+
+            <div class="form__done" id="regDone" role="status" hidden>
+              <p class="form__done-t" data-i18n="reg.doneTitle">تم تسجيلك.</p>
+              <p data-i18n="reg.doneBody">
+                كُشفت أسعار الإيجار في قسم الأنماط أعلاه، وستصلك مخططات الأدوار على
+                رقمك خلال دقائق.
+              </p>
+              <a class="cta" id="waCta" href="#" target="_blank" rel="noopener noreferrer">
+                <span class="cta__border"><i></i><i></i><i></i><i></i></span>
+                <span class="cta__content"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!--
+      Outside `.page`, and that is the whole mechanism — see footerReveal.js and
+      `.foot.is-fixed` in page.css. `.page` is opaque and sits on `z-index: 2`;
+      the footer is fixed to the bottom of the viewport one layer below it, so
+      it is not hidden by the document, it is *covered* by it, and the last
+      section sliding up is what uncovers it.
+
+      A sibling rather than a child because a fixed child of a positioned,
+      z-indexed parent cannot be painted behind that parent — `.page` creates a
+      stacking context, and nothing inside it can escape underneath.
+    -->
+    <!-- ---- Footer -------------------------------------------------------- -->
+      <!--
+        Four link columns beside an identity block, from the reference footer.
+        Its columns were About / Services / Helpful / Contact, which assume a
+        multi-page site with a company behind it; this is one page, so «تصفّح»
+        and «المشروع» point at sections of it rather than at pages that do not
+        exist. No Careers, no Employee Handbook — a link to nothing is worse
+        than a column with three items in it.
+
+        The «تصفّح» links carry `data-nav`, which is what makes them travel
+        through Lenis exactly like the menu bar's — see bindSmoothLinks in
+        nav.js.
+
+        Six of the eight section links share their labels with the menu bar and
+        take the same `nav.*` keys, which is the point of keying by meaning
+        rather than by position: «الموقع» in the bar and «الموقع» here are one
+        string, and they cannot be translated two different ways.
+      -->
+      <footer class="foot">
+        <div class="wrap">
+          <div class="foot__grid">
+            <div class="foot__brand" data-reveal>
+              <!--
+                The group's own mark, in place of the typeset lockup that stood
+                here. The image *is* the name, so the name is its `alt` and not
+                a caption under it — printing both would be the same words
+                twice, in two typefaces, one of which is not the brand's.
+
+                WebP at 640px: the supplied PNG is 948×606 and 712 KB, which is
+                thirty times what a footer logo needs. The ink in it is already
+                this site's copper (measured at rgb(191,159,102) against the
+                `--accent-hover` token's 191,144,102), so nothing is recoloured.
+
+                `width`/`height` are the intrinsic size, so the row reserves its
+                space before the file arrives and the footer's height — which
+                footerReveal.js measures to size the reveal — does not change
+                under it.
+              -->
+              <img class="foot__mark" src="/brand/logo.webp" width="640" height="409"
+                   alt="مجموعة الأصيل العقارية" data-i18n-attr="alt: foot.logoAlt"
+                   loading="lazy" decoding="async" />
+              <p class="foot__about" data-i18n="foot.about">
+                مالك ومشغّل لمحفظة مكتبية في دبي والشارقة تتجاوز 48,000 م² مؤجّرة.
+                «رواق» هو مشروعنا المكتبي في قلب الخليج التجاري.
+              </p>
+              <div class="foot__social">
+                <a href="#" aria-label="لينكدإن" data-i18n-attr="aria-label: foot.linkedin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3" /><path d="M7 10v7M7 7v.01M11.5 17v-4a2.5 2.5 0 0 1 5 0v4" /></svg></a>
+                <a href="#" aria-label="انستغرام" data-i18n-attr="aria-label: foot.instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg></a>
+              </div>
+            </div>
+
+            <nav class="foot__cols" aria-label="روابط الموقع" data-i18n-attr="aria-label: foot.aria" data-reveal="stagger">
+              <div class="foot__col" style="--i: 0">
+                <p class="foot__h" data-i18n="foot.browse">تصفّح</p>
+                <ul>
+                  <li><a href="#types" data-nav="types" data-i18n="nav.types">المساحات</a></li>
+                  <li><a href="#plans" data-nav="plans" data-i18n="nav.plans">المخططات</a></li>
+                  <li><a href="#location" data-nav="location" data-i18n="nav.location">الموقع</a></li>
+                  <li><a href="#timeline" data-nav="timeline" data-i18n="nav.timeline">الجدول الزمني</a></li>
+                </ul>
+              </div>
+
+              <div class="foot__col" style="--i: 1">
+                <p class="foot__h" data-i18n="foot.project">المشروع</p>
+                <ul>
+                  <li><a href="#lease" data-nav="lease" data-i18n="foot.leaseLink">ما يشمله الإيجار</a></li>
+                  <li><a href="#owner" data-nav="owner" data-i18n="foot.ownerLink">المالك والمشغّل</a></li>
+                  <li><a href="#glimpse" data-nav="glimpse" data-i18n="nav.glimpse">لمحات</a></li>
+                </ul>
+              </div>
+
+              <div class="foot__col" style="--i: 2">
+                <p class="foot__h" data-i18n="foot.help">مساعدة</p>
+                <ul>
+                  <li><a href="#faq" data-nav="faq" data-i18n="faq.h2">الأسئلة الشائعة</a></li>
+                  <li><a href="#register" data-nav="register" data-i18n="nav.register">سجّل اهتمامك</a></li>
+                  <li>
+                    <a class="foot__live" id="footWa" href="#" target="_blank" rel="noopener noreferrer">
+                      <span data-i18n="foot.whatsapp">واتساب</span>
+                      <span class="foot__dot" aria-hidden="true"><i></i><b></b></span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="foot__col" style="--i: 3">
+                <p class="foot__h" data-i18n="foot.contact">تواصل</p>
+                <ul class="foot__contact">
+                  <li>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+                    <a href="mailto:leasing@rawaq.ae">leasing@rawaq.ae</a>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1Z" /></svg>
+                    <a href="tel:+9647801445055" dir="ltr">+964 780 144 5055</a>
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z" /><circle cx="12" cy="10" r="2.6" /></svg>
+                    <address data-i18n="foot.address">الخليج التجاري · شارع الشيخ زايد، دبي</address>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+
+          <div class="foot__reg" data-reveal="stagger">
+            <div style="--i: 0"><p class="foot__k" data-i18n="foot.reg1.k">قيد وسيط عقاري</p><p class="foot__v" data-i18n="foot.reg1.v">RERA · 12084</p></div>
+            <div style="--i: 1"><p class="foot__k" data-i18n="foot.reg2.k">توثيق العقود</p><p class="foot__v" data-i18n="foot.reg2.v">نظام إيجاري · معتمد</p></div>
+            <div style="--i: 2"><p class="foot__k" data-i18n="foot.reg3.k">الرخصة التجارية</p><p class="foot__v" data-i18n="foot.reg3.v">دائرة الاقتصاد والسياحة · 1010772</p></div>
+            <div style="--i: 3"><p class="foot__k" data-i18n="foot.reg4.k">مكتب التأجير</p><p class="foot__v" data-i18n="foot.reg4.v">الدور الأرضي · 9ص–6م</p></div>
+          </div>
+
+          <p class="foot__disclaimer" data-i18n="foot.disclaimer">
+            الصور والمشاهد المعروضة توضيحية وتمثّل مستوى التشطيب المستهدف، وقد تختلف
+            عن المنتج النهائي. المساحات تقريبية وتخضع للقياس النهائي. أسعار الإيجار
+            وشروط العقد قابلة للتغيير دون إشعار حتى توقيع عقد الإيجار وتوثيقه. لا
+            يُشكّل هذا العرض إيجاباً تعاقدياً؛ المرجع الوحيد هو عقد الإيجار الموثّق
+            ولواحقه. أرقام التراخيص أعلاه لأغراض العرض في هذا النموذج التجريبي.
+          </p>
+        </div>
+      </footer>
+
+  </body>
+</html>
