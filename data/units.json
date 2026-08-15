@@ -1,0 +1,62 @@
+[
+  {
+    "id": "A",
+    "name": "النمط A",
+    "kind": "مكتب مضغوط",
+    "area": "65 – 140 م²",
+    "desks": "8 – 16",
+    "rooms": "1",
+    "parking": "3",
+    "rent": "210,000 درهم",
+    "total": 14,
+    "available": 9,
+    "featured": false,
+    "published": true,
+    "order": 1
+  },
+  {
+    "id": "B",
+    "name": "النمط B",
+    "kind": "مكتب متوسط",
+    "area": "180 – 220 م²",
+    "desks": "24 – 32",
+    "rooms": "2",
+    "parking": "6",
+    "rent": "365,000 درهم",
+    "total": 12,
+    "available": 7,
+    "featured": true,
+    "published": true,
+    "order": 2
+  },
+  {
+    "id": "C",
+    "name": "النمط C",
+    "kind": "دور كامل",
+    "area": "420 م²",
+    "desks": "حتى 48",
+    "rooms": "3 + قاعة",
+    "parking": "12",
+    "rent": "740,000 درهم",
+    "total": 6,
+    "available": 4,
+    "featured": false,
+    "published": true,
+    "order": 3
+  },
+  {
+    "id": "X",
+    "name": "لم يُحدَّد",
+    "kind": "طلب دون تحديد مساحة",
+    "area": "—",
+    "desks": "—",
+    "rooms": "—",
+    "parking": "—",
+    "rent": "—",
+    "total": 0,
+    "available": 0,
+    "featured": false,
+    "published": false,
+    "order": 4
+  }
+]
