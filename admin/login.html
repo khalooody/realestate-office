@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ar" dir="rtl" translate="no" class="notranslate">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0e0e0f" />
+    <meta name="google" content="notranslate" />
+    <!--
+      A private panel, not a page. `noindex` because a login screen in a search
+      result is an invitation, and `nofollow` so nothing behind it is crawled
+      through a stray link.
+    -->
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/icon-32.png" />
+    <title>دخول لوحة التحكم · رواق</title>
+
+    <!--
+      The theme, applied before the first paint.
+
+      Same reasoning as the `lang`/`dir` block on the site's index.html and the
+      same shape: `admin.css` defaults to the dark brand ground, so a visitor
+      who chose light gets one frame of charcoal before the module runs and
+      flips it. Four lines here remove the flash; the preference itself is read
+      and written by prefs.js from then on.
+    -->
+    <script>
+      (() => {
+        try {
+          const p = JSON.parse(localStorage.getItem('rawaq:admin:prefs') || '{}');
+          document.documentElement.dataset.theme = p.theme || 'dark';
+        } catch {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/adminLogin-DPTOc-90.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/500-Dt57VjtK.js">
+    <link rel="modulepreload" crossorigin href="/assets/ui-xW8a68Za.js">
+    <link rel="stylesheet" crossorigin href="/assets/500-CcCH8nVX.css">
+    <link rel="stylesheet" crossorigin href="/assets/ui-BEsNsyXC.css">
+  </head>
+
+  <body>
+    <main class="auth">
+      <!--
+        The left panel is decoration and says so: `aria-hidden`, no focusable
+        child, nothing in it that is not repeated in the form or on the site.
+        It is hidden outright under 900px rather than stacked above the fields,
+        because a login on a phone should be the login.
+      -->
+      <aside class="auth__art" aria-hidden="true">
+        <div class="auth__brand">
+          <span class="auth__mark">
+            <svg viewBox="0 0 50 39" fill="currentColor">
+              <path d="M16.4992 2H37.5808L22.0816 24.9729H1L16.4992 2Z" />
+              <path d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z" />
+            </svg>
+          </span>
+          <span>
+            <span class="auth__wm">رواق</span>
+            <span class="auth__wms">الخليج التجاري · دبي</span>
+          </span>
+        </div>
+
+        <div class="auth__quote">
+          <h2>لوحة تحكّم المشروع.</h2>
+          <p>
+            المسجّلون، الأنماط والوحدات، ومحتوى الصفحة — في مكان واحد.
+            كل تعديل هنا هو ما يراه الزائر هناك.
+          </p>
+        </div>
+
+        <div class="auth__stats">
+          <div><b>32</b><span>مكتباً</span></div>
+          <div><b>65 – 420</b><span>م²</span></div>
+          <div><b>14 سبتمبر</b><span>فتح التأجير</span></div>
+        </div>
+      </aside>
+
+      <section class="auth__form">
+        <div class="auth__box">
+          <h1 class="auth__h">تسجيل الدخول</h1>
+          <p class="auth__p">لوحة خاصة بفريق رواق. الدخول بحساب الفريق فقط.</p>
+
+          <!-- `role="alert"` so the failure is announced, not just painted red. -->
+          <div class="auth__err" id="err" role="alert" hidden></div>
+
+          <form id="loginForm" novalidate>
+            <label class="fld">
+              <span class="fld__l">البريد الإلكتروني</span>
+              <input
+                class="fld__i"
+                id="email"
+                name="email"
+                type="email"
+                dir="ltr"
+                autocomplete="username"
+                placeholder="name@rawaq.ae"
+                required
+              />
+            </label>
+
+            <label class="fld">
+              <span class="fld__l">كلمة المرور</span>
+              <input
+                class="fld__i"
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                required
+              />
+            </label>
+
+            <div class="auth__row">
+              <label class="auth__remember">
+                <input class="chk" type="checkbox" id="remember" checked />
+                أبقني مسجّلاً
+              </label>
+              <a class="auth__link" href="#" id="forgot">نسيت كلمة المرور؟</a>
+            </div>
+
+            <button class="btn btn--solid auth__submit" type="submit" id="submit">دخول</button>
+          </form>
+
+          <!--
+            Written down on the screen on purpose, and it is the clearest
+            statement of what this is: a panel whose passwords ship inside a
+            JSON file the browser downloads. Publishing it as-is would be
+            publishing the credentials — see the header of admin/js/auth.js.
+            The block goes when a server does the checking.
+          -->
+          <div class="auth__demo">
+            <b>حسابات تجريبية</b><br />
+            <code>admin@rawaq.ae</code> · <code>rawaq2026</code> — مالك الحساب<br />
+            <code>lama@rawaq.ae</code> · <code>leasing2026</code> — مسؤول تأجير<br />
+            <code>marwan@rawaq.ae</code> · <code>viewer2026</code> — مطّلع (موقوف)
+          </div>
+
+          <a class="auth__back" href="/">← العودة إلى موقع رواق</a>
+        </div>
+      </section>
+    </main>
+
+  </body>
+</html>

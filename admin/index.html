@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ar" dir="rtl" translate="no" class="notranslate">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e0e0f" />
+    <meta name="google" content="notranslate" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/icon-32.png" />
+    <title>لوحة التحكم · رواق</title>
+
+    <!-- Theme before first paint. See the twin of this block in login.html. -->
+    <script>
+      (() => {
+        try {
+          const p = JSON.parse(localStorage.getItem('rawaq:admin:prefs') || '{}');
+          document.documentElement.dataset.theme = p.theme || 'dark';
+        } catch {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/admin-DwEsE3jq.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/500-Dt57VjtK.js">
+    <link rel="modulepreload" crossorigin href="/assets/ui-xW8a68Za.js">
+    <link rel="stylesheet" crossorigin href="/assets/500-CcCH8nVX.css">
+    <link rel="stylesheet" crossorigin href="/assets/ui-BEsNsyXC.css">
+  </head>
+
+  <body>
+    <!--
+      Three empty containers and nothing else.
+
+      Every one of them is filled from data that has not arrived yet — the rail
+      carries a live count of untouched registrations, the bar's title is the
+      current route, and the view is the route itself — so markup here would be
+      markup that is thrown away on the first render. What the file does own is
+      the *shape*: rail, bar, view. That is the part that never changes.
+
+      The boot state is real markup rather than an empty box, because the first
+      paint happens before `load()` resolves and a blank charcoal page for two
+      hundred milliseconds reads as a failure.
+    -->
+    <div class="shell">
+      <nav class="side" id="side" aria-label="أقسام اللوحة"></nav>
+
+      <div class="main">
+        <header class="top" id="top"></header>
+        <main class="view" id="view">
+          <div class="boot"><i></i><span>جارٍ تحميل بيانات المشروع…</span></div>
+        </main>
+      </div>
+    </div>
+
+  </body>
+</html>
