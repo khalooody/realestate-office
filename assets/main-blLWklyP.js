@@ -65,8 +65,9 @@ var mf=Object.defineProperty;var gf=(a,e,i)=>e in a?mf(a,e,{enumerable:!0,config
         <img class="nav__logo" src="/brand/logo-white.webp" width="640" height="409"
              alt="${ft("brand.name","رواق")}" fetchpriority="high" decoding="async" />
       </a>
-      ${am()}
     </div>
+
+    ${am()}
 
     <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-panel"
             aria-label="${ft("nav.menu","القائمة")}"><span></span><span></span><span></span></button>
